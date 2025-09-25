@@ -1,13 +1,13 @@
-package dimasnaresh.lib.objectruleparser;
+package dimasnaresh.lib;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ObjectRuleParserApplication {
+public class MainClass {
 
     public static void main(String[] args) {
-        SpringApplication.run(ObjectRuleParserApplication.class, args);
+        SpringApplication.run(MainClass.class, args);
     }
 
 }
