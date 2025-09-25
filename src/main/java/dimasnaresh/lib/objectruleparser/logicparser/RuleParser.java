@@ -28,7 +28,7 @@ public class RuleParser {
     public RuleParser(Reflection reflection) {
         ScriptEngineManager seManager = new ScriptEngineManager();
         this.reflection = reflection;
-        this.scriptEngine = seManager.getEngineByName("js");
+        this.scriptEngine = seManager.getEngineByName("graal.js");
     }
 
     public RuleParser(Reflection reflection, ScriptEngine scriptEngine) {
