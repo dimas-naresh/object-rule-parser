@@ -7,10 +7,14 @@ import dimasnaresh.lib.objectruleparser.reflection.interpreter.ExpressionFactory
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class NestedReflection extends ReflectionHelper implements Reflection {
+    private Map<String, String> classAndPackageOfRegisterExpression = new HashMap<>();
 
     /**
      * Returns the value of a (nested) field on a bean.
@@ -34,7 +38,7 @@ public class NestedReflection extends ReflectionHelper implements Reflection {
             for (String nestedField : nestedFields) {
                 Field field;
                 if(nestedField.contains(ExpressionConstant.BRACKET_OPEN_STRING)){
-                    Expression expression = ExpressionFactory.newInstance().gettingExpression(value, nestedField);
+                    Expression expression = generateExpressionFactory(value, nestedField);
                     value = expression.invokeExpression();
                     isArray = false;
                 } else if (nestedField.contains(ExpressionConstant.PARENTHESES_OPEN_STRING)) {
@@ -65,6 +69,20 @@ public class NestedReflection extends ReflectionHelper implements Reflection {
 
         return value;
 
+    }
+
+    public void setFactoryOfExpressions(Expression ... expressions) {
+        Arrays.stream(expressions).forEach(expression
+                -> classAndPackageOfRegisterExpression.put(
+                expression.getClass().getSimpleName(), expression.getClass().getName()));
+    }
+
+    private Expression generateExpressionFactory(Object bean, String fieldName) {
+        try {
+            return ExpressionFactory.newInstance().gettingExpression(bean, fieldName);
+        } catch (IllegalStateException illegalStateException) {
+            return ExpressionFactory.newInstance().gettingExpression(bean, fieldName, classAndPackageOfRegisterExpression);
+        }
     }
 
     private Object[] removeSingleQuotesString(Object[] values) {

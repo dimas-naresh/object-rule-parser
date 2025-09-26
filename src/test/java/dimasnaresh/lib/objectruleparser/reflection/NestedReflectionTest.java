@@ -4,6 +4,7 @@ import dimasnaresh.lib.objectruleparser.param.Address;
 import dimasnaresh.lib.objectruleparser.param.City;
 import dimasnaresh.lib.objectruleparser.param.ClientAddress;
 import dimasnaresh.lib.objectruleparser.param.Province;
+import dimasnaresh.lib.objectruleparser.param.expression.SimpleExpressionFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,15 @@ class NestedReflectionTest {
         field.setAccessible(true);
         Assertions.assertEquals("SOME PROVINCE NAME", field.get(province).toString());
 
+    }
+
+    @Test
+    void testGetWithSimpleExpressionToUpperCase() {
+        ClientAddress clientAddress = createClientAdress();
+        NestedReflection nsReflection = new NestedReflection();
+        nsReflection.setFactoryOfExpressions(new SimpleExpressionFilter());
+        Assertions.assertEquals("PROVINCE NUMBER 2", nsReflection.getObject(clientAddress,
+                "addresses.2.province.provinceName.SimpleExpressionFilter{uppercase}"));
     }
 
     @Test
